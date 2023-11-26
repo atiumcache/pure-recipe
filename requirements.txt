@@ -1,0 +1,2 @@
+pip install rich
+pip install recipe_scrapers
