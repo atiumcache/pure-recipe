@@ -1,4 +1,5 @@
-# Web-to-Markdown Recipe Viewer
+# Pure Recipe
+### A web-to-markdown recipe viewer.
 
 We're tired of the ads. We're tired of the blog posts. We just want to view a recipe!
 
