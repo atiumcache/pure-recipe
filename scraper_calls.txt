@@ -1,0 +1,13 @@
+scraper.host()
+scraper.title()
+scraper.total_time()
+scraper.image()
+scraper.ingredients()
+scraper.ingredient_groups()
+scraper.instructions()
+scraper.instructions_list()
+scraper.yields()
+scraper.to_json()
+scraper.links()
+scraper.nutrients()  # if available
+scraper.canonical_url()  # also not always available
