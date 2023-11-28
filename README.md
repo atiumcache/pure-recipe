@@ -1,8 +1,9 @@
-# Web-to-Markdown Recipe Viewer
+# Pure Recipe
+### A web-to-markdown recipe viewer.
 
-I'm tired of the ads. I'm tired of the drawn-out blog posts. I just want to view a recipe!
+We're tired of the ads. We're tired of the blog posts. We just want to view a recipe!
 
-This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and voila, a pretty-printed recipe is outputted to your terminal. 
+This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and _voila_, a pretty-printed recipe is outputted to your terminal. 
 
 ## Usage
 
