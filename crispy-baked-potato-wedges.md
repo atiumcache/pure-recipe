@@ -1,4 +1,6 @@
 # Crispy Baked Potato Wedges
+**Serves:** 4 servings
+**Total Time:** 60
 
 ## Ingredients
 - Cooking spray, for the baking sheet

@@ -2,6 +2,7 @@ from recipe_scrapers import scrape_me
 from rich.console import Console 
 import sys
 import argparse
+import yaml
 
 recipe_url = sys.argv[1]
 
@@ -34,8 +35,10 @@ def save_to_markdown():
     # TODO: if recipe file exists, make copy with -1 extension?
 
     with open(recipe_file, "w") as text_file:
-        print(f"# {title}\n", file=text_file)
-        print(f"## Ingredients", file=text_file)
+        print(f"# {title}", file=text_file)
+        print(f"**Serves:** {scraper.yields()}", file=text_file)
+        print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
+        print(f"\n## Ingredients", file=text_file)
         for ingredient in scraper.ingredients():
             print(f'-', ingredient, file=text_file)
         print(f"\n## Instructions", file=text_file)
