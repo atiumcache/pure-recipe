@@ -4,12 +4,7 @@ import sys
 import argparse
 import yaml
 
-recipe_url = sys.argv[1]
-
 console = Console()
-
-scraper = scrape_me(recipe_url)
-
 
 def format_file_name(recipe_title):
     """
@@ -27,12 +22,14 @@ def format_file_name(recipe_title):
     return "".join(s)
 
 
-def save_to_markdown():
+def save_to_markdown(recipe_url):
+
+    scraper = scrape_me(recipe_url)
 
     title = scraper.title()
     recipe_file = format_file_name(title) + '.md'
 
-    # TODO: if recipe file exists, make copy with -1 extension?
+    # TODO: if recipe file exists, make copy with -1 extension? 
 
     with open(recipe_file, "w") as text_file:
         print(f"# {title}", file=text_file)
@@ -45,13 +42,15 @@ def save_to_markdown():
         for index, instruction in enumerate(scraper.instructions_list()):
             print(f'{index+1}.', instruction, file=text_file)
 
-def view_in_terminal():
+def view_in_terminal(recipe_url):
     """
     
     :param url: a url string from a recipe website
     :return: 
     :rtype:
     """
+    scraper = scrape_me(recipe_url)
+
     console.print('\n\n', scraper.title(), style="bold white", justify='center')
 
     console.print('\nINGREDIENTS', style="bold white")
@@ -64,21 +63,23 @@ def view_in_terminal():
         console.print(instruction, style='gold3')
 
 
-def main(url):
+def main():
 
-    #parser = argparse.ArgumentParser(description='Make recipes pretty again.')
-    #parser.add_argument('operations', choices=['view', 'save'], nargs='+')
+    parser = argparse.ArgumentParser(
+        prog='Pure Recipe', 
+        description='Make recipes pretty again.')
+    
+    parser.add_argument('operations', choices=['view', 'save'])
+    parser.add_argument('url')
 
-    #args = parser.parse_args()
+    args = parser.parse_args()
+    url = args.url
 
-    #if '--v' in args:
-     #   view_in_terminal(url)
+    if args.operations == 'view':
+        view_in_terminal(url)
 
-    #if '--s' in args:
-     #   save_to_markdown
-
-    save_to_markdown()
+    if args.operations == 'save':
+        save_to_markdown(url)
     
 
-main(recipe_url)
-
+main()
