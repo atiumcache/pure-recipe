@@ -15,7 +15,7 @@ To save the recipe to a markdown file:
 
 	python recipe-to-markdown.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
 
-The default location is `~/Documents/recipes/`. You can change this path in a config.yaml file. 
+The default location is `/home/user/Documents/recipes/`. Change this path in a config.yaml file. 
 
 You can turn other settings on/off in the yaml file. If you don't want a certain 
 
