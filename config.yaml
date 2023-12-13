@@ -1,4 +1,4 @@
-directory: ~/Documents/recipes/; 
-
-time: true;
-yield: true;
+---
+directory: '/home/andrew/Documents/recipes/'
+time: true
+yield: true

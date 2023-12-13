@@ -28,10 +28,10 @@ def format_file_name(recipe_title):
 
 def save_to_markdown(recipe_url):
     """
+    Scrapes recipe URL and saves to markdown file.
 
     :param url: a url string from a recipe website
-    :return:
-    :rtype:
+    :return: none
     """
 
     scraper = scrape_me(recipe_url)
@@ -57,10 +57,10 @@ def save_to_markdown(recipe_url):
 
 def view_in_terminal(recipe_url):
     """
+    Scrapes recipe url and returns plain-text recipe to terminal output.
 
     :param url: a url string from a recipe website
-    :return:
-    :rtype:
+    :return: none
     """
     scraper = scrape_me(recipe_url)
 
