@@ -15,7 +15,7 @@ To view the recipe in the terminal:
 
 Example of viewing:
 
-[![asciicast](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB.svg)](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB)
+[![asciicast](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB.svg)](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB?t=8)
 
 ### Save to Markdown
 
