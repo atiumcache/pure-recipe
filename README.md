@@ -7,9 +7,17 @@ This is a terminal application that allows you to quickly bypass the junk that p
 
 ## Usage
 
+### View in Terminal
+
 To view the recipe in the terminal:
 
 	python recipe-to-markdown.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
+
+Example of viewing:
+
+[![asciicast](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB.svg)](https://asciinema.org/a/IHjK7v8F3TEVVBMFJoxKcbOuB)
+
+### Save to Markdown
 
 To save the recipe to a markdown file: 
 
@@ -17,7 +25,7 @@ To save the recipe to a markdown file:
 
 The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
-You can turn other settings on/off in the yaml file. If you don't want a certain 
+You can turn other settings on/off in the yaml file. 
 
 ## Configuration
 

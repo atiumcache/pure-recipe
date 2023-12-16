@@ -42,24 +42,26 @@ def save_to_markdown(recipe_url):
     """
     load_config()
 
-    scraper = scrape_me(recipe_url)
-    directory = settings.get("directory")
-    if not os.path.exists(directory):
-        os.makedirs(directory, mode="0o777")
-    title = scraper.title()
-    recipe_file = directory + format_file_name(title) + ".md"
+    with console.status("Saving recipe...", spinner="aesthetic"):
+        scraper = scrape_me(recipe_url)
+        directory = settings.get("directory")
+        if not os.path.exists(directory):
+            os.makedirs(directory, mode="0o777")
+        title = scraper.title()
+        recipe_file = directory + format_file_name(title) + ".md"
 
-    with open(recipe_file, "w+") as text_file:
-        print(f"# {title}", file=text_file)
-        print(f"**Serves:** {scraper.yields()}", file=text_file)
-        print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
-        print(f"\n## Ingredients", file=text_file)
-        for ingredient in scraper.ingredients():
-            print(f"-", ingredient, file=text_file)
-        print(f"\n## Instructions", file=text_file)
-        for index, instruction in enumerate(scraper.instructions_list()):
-            print(f"{index+1}.", instruction, file=text_file)
+        with open(recipe_file, "w+") as text_file:
+            print(f"# {title}", file=text_file)
+            print(f"**Serves:** {scraper.yields()}", file=text_file)
+            print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
+            print(f"\n## Ingredients", file=text_file)
+            for ingredient in scraper.ingredients():
+                print(f"-", ingredient, file=text_file)
+            print(f"\n## Instructions", file=text_file)
+            for index, instruction in enumerate(scraper.instructions_list()):
+                print(f"{index+1}.", instruction, file=text_file)
 
+    console.print("Saved succesfully.")   
     return True
 
 
@@ -70,9 +72,11 @@ def view_in_terminal(recipe_url):
     :param url: a url string from a recipe website
     :return: True if successful, False otherwise.
     """
-    scraper = scrape_me(recipe_url)
+    with console.status("Loading recipe...", spinner="aesthetic"):
+        scraper = scrape_me(recipe_url)
 
-    console.print("\n\n", scraper.title(), style="bold white", justify="center")
+    console.clear()
+    console.print("\n", scraper.title(), "\n", style="bold black on white", justify="center", end="\n")
 
     console.print("\nINGREDIENTS", style="bold white")
     for index, ingredient in enumerate(scraper.ingredients()):
@@ -81,7 +85,7 @@ def view_in_terminal(recipe_url):
     console.print("\nINSTRUCTIONS", style="bold white")
     for index, instruction in enumerate(scraper.instructions_list()):
         console.print(index + 1, ") ", style="white", sep="", end="", highlight=False)
-        console.print(instruction, style="gold3")
+        console.print(instruction, style="gold3", soft_wrap=True, end="\n\n")
 
     return True
 
