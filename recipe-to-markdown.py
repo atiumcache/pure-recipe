@@ -3,11 +3,18 @@ from rich.console import Console
 import argparse
 import yaml
 import os
+import platformdirs
 
 console = Console()
 
-with open("config.yaml", "r") as file:
-    settings = yaml.safe_load(file)
+try:
+        with open("config.yaml", "r") as file:
+            settings = yaml.safe_load(file)
+except:
+    print("A config.yaml file has been created in ~/.config/pure-recipe.")
+    print("Please add a path to the config file to save your recipes.")
+    print("No directory needed if viewing recipes in the terminal.")
+    quit()
 
 
 def format_file_name(recipe_title):
@@ -31,8 +38,9 @@ def save_to_markdown(recipe_url):
     Scrapes recipe URL and saves to markdown file.
 
     :param url: a url string from a recipe website
-    :return: none
+    :return: True if successful, False otherwise.
     """
+    load_config()
 
     scraper = scrape_me(recipe_url)
     directory = settings.get("directory")
@@ -40,8 +48,6 @@ def save_to_markdown(recipe_url):
         os.makedirs(directory, mode="0o777")
     title = scraper.title()
     recipe_file = directory + format_file_name(title) + ".md"
-
-    # TODO: if recipe file exists, make copy with -1 extension?
 
     with open(recipe_file, "w+") as text_file:
         print(f"# {title}", file=text_file)
@@ -54,13 +60,15 @@ def save_to_markdown(recipe_url):
         for index, instruction in enumerate(scraper.instructions_list()):
             print(f"{index+1}.", instruction, file=text_file)
 
+    return True
+
 
 def view_in_terminal(recipe_url):
     """
     Scrapes recipe url and returns plain-text recipe to terminal output.
 
     :param url: a url string from a recipe website
-    :return: none
+    :return: True if successful, False otherwise.
     """
     scraper = scrape_me(recipe_url)
 
@@ -75,8 +83,32 @@ def view_in_terminal(recipe_url):
         console.print(index + 1, ") ", style="white", sep="", end="", highlight=False)
         console.print(instruction, style="gold3")
 
+    return True
+
+
+def load_config():
+    """
+    Loads the config settings for saving recipe files.
+    """
+    config_path = platformdirs.user_config_path(appname='pure-recipe')
+
+    try:
+        os.chdir(config_path)
+    except: 
+        os.mkdir(config_path)
+        os.chdir(config_path)
+
+    directory = settings.get("directory")
+
+    if directory == '':
+        print("Please add a path to the config file to save your recipes.")
+        print("Then, try again.")
+        quit()
+
 
 def main():
+    
+
     parser = argparse.ArgumentParser(
         prog="Pure Recipe", description="Make recipes pretty again."
     )
