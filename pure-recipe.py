@@ -8,8 +8,8 @@ import platformdirs
 console = Console()
 
 try:
-        with open("config.yaml", "r") as file:
-            settings = yaml.safe_load(file)
+    with open("config.yaml", "r") as file:
+        settings = yaml.safe_load(file)
 except:
     print("A config.yaml file has been created in ~/.config/pure-recipe.")
     print("Please add a path to the config file to save your recipes.")
@@ -90,25 +90,23 @@ def load_config():
     """
     Loads the config settings for saving recipe files.
     """
-    config_path = platformdirs.user_config_path(appname='pure-recipe')
+    config_path = platformdirs.user_config_path(appname="pure-recipe")
 
     try:
         os.chdir(config_path)
-    except: 
+    except:
         os.mkdir(config_path)
         os.chdir(config_path)
 
     directory = settings.get("directory")
 
-    if directory == '':
+    if directory == "":
         print("Please add a path to the config file to save your recipes.")
         print("Then, try again.")
         quit()
 
 
 def main():
-    
-
     parser = argparse.ArgumentParser(
         prog="Pure Recipe", description="Make recipes pretty again."
     )
