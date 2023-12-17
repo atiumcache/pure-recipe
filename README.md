@@ -11,7 +11,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 
 To view the recipe in the terminal:
 
-	python recipe-to-markdown.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
+	python pure-recipe.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
 
 Example of viewing:
 
@@ -21,7 +21,7 @@ Example of viewing:
 
 To save the recipe to a markdown file: 
 
-	python recipe-to-markdown.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
+	python pure-recipe.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
 
 The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
