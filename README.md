@@ -5,10 +5,13 @@ We're tired of the ads. We're tired of the blog posts. We just want the recipe!
 
 This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and _voilà_, a pretty-printed recipe is outputted to your terminal. 
 
-### [Usage](#usage)
-### [Configuration](#configuration)
-### [Supported Websites](#supported-websites)
-### [License](#license)
+- [Usage](#usage)
+	- [View in Terminal](#view-in-terminal)
+	- [Save to Markdown](#save-to-markdown)
+- [Configuration](#configuration)
+	- [Config Template](#config-template)
+- [Supported Websites](#supported-websites)
+- [License](#license)
 
 ## Usage
 
