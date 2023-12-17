@@ -42,3 +42,7 @@ The program will create a `config.yaml` file upon its first run. Copy and paste 
 ## Supported Websites
 
 See this link for supported websites: https://github.com/hhursev/recipe-scrapers#scrapers-available-for
+
+## License
+
+Distributed under the MIT License. See LICENSE.txt for more information.
