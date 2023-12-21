@@ -113,14 +113,14 @@ def main():
     """
     Flow for the application. 
 
-    Parser takes in the arguments. Depending on the arguments, we either view or save the corresponding recipe. 
+    Depending on the arguments, we either view or save the corresponding recipe. 
     """
 
     parser = argparse.ArgumentParser(
         prog="Pure Recipe", description="Make recipes pretty again."
     )
 
-    parser.add_argument("operations", choices=["view", "save"])
+    parser.add_argument("operations", choices=["view", "save", "list"])
     parser.add_argument("url")
 
     args = parser.parse_args()
@@ -131,6 +131,13 @@ def main():
 
     if args.operations == "save":
         save_to_markdown(url)
+
+    if args.operations == "list":
+        try:
+            f = open(url, "r")
+            save_to_markdown(f.readline())
+        except:
+            print('File error. Try again using proper file format. See documentation.')
 
 
 main()
