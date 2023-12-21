@@ -11,6 +11,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 - [Configuration](#configuration)
 	- [Config Template](#config-template)
 - [Supported Websites](#supported-websites)
+- [Future Work](#future-work)
 - [License](#license)
 
 ## Usage
@@ -50,6 +51,11 @@ The program will create a `config.yaml` file upon its first run. Copy and paste 
 ## Supported Websites
 
 See this link for supported websites: https://github.com/hhursev/recipe-scrapers#scrapers-available-for
+
+## Future Work
+
+- Error catching for invalid inputs.
+- Different color themes.
 
 ## License
 
