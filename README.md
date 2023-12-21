@@ -11,6 +11,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 - [Configuration](#configuration)
 	- [Config Template](#config-template)
 - [Supported Websites](#supported-websites)
+- [Why Create Pure Recipe?](#why-create-pure-recipe)
 - [Future Work](#future-work)
 - [License](#license)
 
@@ -54,11 +55,17 @@ The program will create a `config.yaml` file upon its first run. Copy and paste 
 
 See this link for supported websites: https://github.com/hhursev/recipe-scrapers#scrapers-available-for
 
+## Why Create Pure Recipe?
+
+Thre does other solutions for bypassing ad-filled recipes --- namely, Paprika does a good job. However, you are locked into their ecosystem and exporting the recipes can be troublesome. Plus, there is a subscription fee to use the app on multiple ecosystems/devices. 
+
+With Pure Recipe, you can be in charge of your own digital recipe book. By saving the files in Markdown format, you can quickly transfer recipes to a new device. Or, share your well-formatted recipes with family and friends without forcing them to download a propietary app. 
+
 ## Future Work
 
 - Error catching for invalid inputs.
 - Different color themes.
-- Pass in a list of URLs to save.
+- Ability to pass in a list of URLs to save, all at once.
 - Search for recipes from the terminal.
 
 ## License
