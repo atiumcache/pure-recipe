@@ -16,6 +16,8 @@ This is a terminal application that allows you to quickly bypass the junk that p
 
 ## Usage
 
+There are two options: view or save. 
+
 ### View in Terminal
 
 To view the recipe in the terminal:
@@ -56,6 +58,8 @@ See this link for supported websites: https://github.com/hhursev/recipe-scrapers
 
 - Error catching for invalid inputs.
 - Different color themes.
+- Pass in a list of URLs to save.
+- Search for recipes from the terminal.
 
 ## License
 
