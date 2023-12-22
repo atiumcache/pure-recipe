@@ -3,7 +3,7 @@
 
 We're tired of the ads. We're tired of the blog posts. We just want the recipe!
 
-This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and _voilà_, a pretty-printed recipe is outputted to your terminal. 
+This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and _voilà_, a pretty-printed recipe is outputted to your terminal. Alternatively, you can save the recipe to a markdown file for later use.
 
 - [Installation](#installation)
 - [Usage](#usage)
