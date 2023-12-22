@@ -127,17 +127,31 @@ def main():
     url = args.url
 
     if args.operations == "view":
-        view_in_terminal(url)
+        try: 
+            view_in_terminal(url)
+        except:
+            console.print('\nUh oh! There was an error.', style='bright_red bold')
+            print('\nUsage:')
+            print('python pure-recipe.py view https://recipes.com/sample-recipe')
+            console.print('\nTry again, or see documentation for more info.\n')
 
     if args.operations == "save":
-        save_to_markdown(url)
+        try: 
+            save_to_markdown(url)
+        except:
+            console.print('\nUh oh! There was an error.', style='bright_red bold')
+            print('\nUsage:')
+            print('python pure-recipe.py save https://recipes.com/sample-recipe')
+            console.print('\nTry again, or see documentation for more info.\n')
 
     if args.operations == "list":
-        try:
-            f = open(url, "r")
-            save_to_markdown(f.readline())
-        except:
-            print('File error. Try again using proper file format. See documentation.')
+        f = open(url, "r")
+        for line in f:
+            try:    
+                single_url = line.strip().rstrip('\n')
+                save_to_markdown(single_url)
+            except:
+                console.print('\nFile error. Try again using proper file format. See documentation.\n', style="bright_red")
 
 
 main()
