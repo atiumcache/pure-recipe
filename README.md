@@ -57,7 +57,7 @@ See this link for supported websites: https://github.com/hhursev/recipe-scrapers
 
 ## Why Create Pure Recipe?
 
-Thre does other solutions for bypassing ad-filled recipes --- namely, Paprika does a good job. However, you are locked into their ecosystem and exporting the recipes can be troublesome. Plus, there is a subscription fee to use the app on multiple ecosystems/devices. 
+There does exist other solutions for bypassing ad-filled recipes --- namely, Paprika. However, you are locked into their ecosystem and exporting the recipes can be troublesome. Plus, there is a subscription fee to use the app on multiple ecosystems/devices. 
 
 With Pure Recipe, you can be in charge of your own digital recipe book. By saving the files in Markdown format, you can quickly transfer recipes to a new device. Or, share your well-formatted recipes with family and friends without forcing them to download a propietary app. 
 
