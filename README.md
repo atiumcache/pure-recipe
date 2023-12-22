@@ -99,8 +99,9 @@ With Pure Recipe, you can be in charge of your own digital recipe book. By savin
 
 - Error catching for invalid inputs.
 - Different color themes.
-- Ability to pass in a list of URLs to save, all at once.
+- ~~Ability to pass in a list of URLs to save, all at once.~~
 - Search for recipes from the terminal.
+- Browse your saved-recipes folder in the terminal.
 
 ## License
 
