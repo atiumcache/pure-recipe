@@ -9,6 +9,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 - [Usage](#usage)
 	- [View in Terminal](#view-in-terminal)
 	- [Save to Markdown](#save-to-markdown)
+	- [Save a List of URLs](#save-a-list-of-urls)
 - [Configuration](#configuration)
 	- [Config Template](#config-template)
 - [Supported Websites](#supported-websites)
@@ -32,7 +33,7 @@ Alternatively, you can install each dependency manually:
 
 ## Usage
 
-There are two options: view or save. 
+There are three options: `view`, `save`, or `list`. 
 
 ### View in Terminal
 
@@ -53,6 +54,24 @@ To save the recipe to a markdown file:
 The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
 You can turn other settings on/off in the yaml file. 
+
+### Save a List of URLs
+
+Have a whole bunch of recipes that you want to save? Just create a `.txt` file with one recipe on each line. 
+
+Example file called `recipes_list.txt`:
+
+	https://www.seriouseats.com/beef-braciole-recipe-7561806
+	https://www.seriouseats.com/basque-cheesecake
+	https://www.seriouseats.com/omelette-souffle-with-cheese
+
+Then, run the program as follows:
+
+	python pure-recipe.py list recipes_list.txt
+
+You should see all recipes on the list saved in markdown format.
+
+The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
 ## Configuration
 
