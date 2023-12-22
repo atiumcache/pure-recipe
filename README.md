@@ -5,6 +5,7 @@ We're tired of the ads. We're tired of the blog posts. We just want the recipe!
 
 This is a terminal application that allows you to quickly bypass the junk that plagues most recipe websites. Just run the program and _voilà_, a pretty-printed recipe is outputted to your terminal. 
 
+- [Installation](#installation)
 - [Usage](#usage)
 	- [View in Terminal](#view-in-terminal)
 	- [Save to Markdown](#save-to-markdown)
@@ -14,6 +15,20 @@ This is a terminal application that allows you to quickly bypass the junk that p
 - [Why Create Pure Recipe?](#why-create-pure-recipe)
 - [Future Work](#future-work)
 - [License](#license)
+
+## Installation
+
+Download `pure-recipe.py` and `requirements.txt` from this repository.
+
+Then, install the dependencies from `pip`:
+
+	pip install -r requirements.txt
+
+Alternatively, you can install each dependency manually:
+
+	pip install rich
+	pip install recipe_scrapers
+	pip install pyyaml
 
 ## Usage
 
