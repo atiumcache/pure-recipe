@@ -18,6 +18,54 @@ except:
     quit()
 
 
+def main():
+    """
+    Flow for the application.
+
+    Depending on the arguments, we either view or save the corresponding recipe.
+    """
+
+    parser = argparse.ArgumentParser(
+        prog="Pure Recipe", description="Make recipes pretty again."
+    )
+
+    parser.add_argument("operations", choices=["view", "save", "list"])
+    parser.add_argument("url")
+
+    args = parser.parse_args()
+    url = args.url
+
+    if args.operations == "view":
+        try:
+            view_in_terminal(url)
+        except:
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py view https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
+
+    if args.operations == "save":
+        try:
+            save_to_markdown(url)
+        except:
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py save https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
+
+    if args.operations == "list":
+        f = open(url, "r")
+        for line in f:
+            try:
+                single_url = line.strip().rstrip("\n")
+                save_to_markdown(single_url)
+            except:
+                console.print(
+                    "\nFile error. Try again using proper file format. See documentation.\n",
+                    style="bright_red",
+                )
+
+
 def format_file_name(recipe_title):
     """
     Converts the recipe title to a nice format.
@@ -107,54 +155,6 @@ def load_config():
         print("Please add a path to the config file to save your recipes.")
         print("Then, try again.")
         quit()
-
-
-def main():
-    """
-    Flow for the application.
-
-    Depending on the arguments, we either view or save the corresponding recipe.
-    """
-
-    parser = argparse.ArgumentParser(
-        prog="Pure Recipe", description="Make recipes pretty again."
-    )
-
-    parser.add_argument("operations", choices=["view", "save", "list"])
-    parser.add_argument("url")
-
-    args = parser.parse_args()
-    url = args.url
-
-    if args.operations == "view":
-        try:
-            view_in_terminal(url)
-        except:
-            console.print("\nUh oh! There was an error.", style="bright_red bold")
-            print("\nUsage:")
-            print("python pure-recipe.py view https://recipes.com/sample-recipe")
-            console.print("\nTry again, or see documentation for more info.\n")
-
-    if args.operations == "save":
-        try:
-            save_to_markdown(url)
-        except:
-            console.print("\nUh oh! There was an error.", style="bright_red bold")
-            print("\nUsage:")
-            print("python pure-recipe.py save https://recipes.com/sample-recipe")
-            console.print("\nTry again, or see documentation for more info.\n")
-
-    if args.operations == "list":
-        f = open(url, "r")
-        for line in f:
-            try:
-                single_url = line.strip().rstrip("\n")
-                save_to_markdown(single_url)
-            except:
-                console.print(
-                    "\nFile error. Try again using proper file format. See documentation.\n",
-                    style="bright_red",
-                )
 
 
 if __name__ == "__main__":
