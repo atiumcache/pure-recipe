@@ -19,7 +19,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 
 ## Installation
 
-Download `pure-recipe.py` and `requirements.txt` from this repository.
+Download `pure_recipe.py` and `requirements.txt` from this repository.
 
 Then, install the dependencies from `pip`:
 
@@ -39,7 +39,7 @@ There are three options: `view`, `save`, or `list`.
 
 To view the recipe in the terminal:
 
-	python pure-recipe.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
+	python pure_recipe.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
 
 Example of viewing:
 
@@ -49,7 +49,7 @@ Example of viewing:
 
 To save the recipe to a markdown file: 
 
-	python pure-recipe.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
+	python pure_recipe.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
 
 The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
@@ -67,7 +67,7 @@ Example file called `recipes_list.txt`:
 
 Then, run the program as follows:
 
-	python pure-recipe.py list recipes_list.txt
+	python pure_recipe.py list recipes_list.txt
 
 You should see all recipes on the list saved in markdown format.
 
