@@ -47,8 +47,8 @@ def save_to_markdown(recipe_url):
     Scrapes recipe URL and saves to markdown file.
 
     :param url: a url string from a recipe website
-    :rtype: bool
-    :return: True if successful, False otherwise.
+    :rtype: string
+    :return: path to file
     """
     load_config()
 
@@ -70,7 +70,7 @@ def save_to_markdown(recipe_url):
         for index, instruction in enumerate(scraper.instructions_list()):
             print(f"{index+1}.", instruction, file=text_file)
 
-    return True
+    return recipe_file
 
 
 def print_markdown(md):
@@ -81,20 +81,24 @@ def print_markdown(md):
 
 def view_in_terminal(recipe_url):
     """
-    Scrapes recipe url and returns plain-text recipe to terminal output.
+    Scrapes recipe url and returns markdown-formatted recipe to terminal output.
 
     :param url: a url string from a recipe website
     :rtype: bool
     :return: True if successful, False otherwise.
     """
-    scraper = scrape_me(recipe_url)
-    
-    title = scraper.title()
-  
-    ### Fix
-    ### Create temp file, utilize save_to_markdown, then print to markdown
-    
+    try:
+        file_path = save_to_markdown(recipe_url)
+        f = open(file_path, "r")
+        md = Markdown(f.read())
+        print_markdown(md)
+        os.remove(file_path)
+    except:
+        console.print("\nError in view_in_terminal function.\n", style="bright_red")
+        return False
 
+    return True
+    
 
 def browse_recipes():
     with open("config.yaml", "r") as file:
@@ -104,13 +108,30 @@ def browse_recipes():
 
     directory = "/home/andrew/Documents/recipes/"
 
+    files_to_paths = {}
+
+    """
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         file_path = directory + filename
-        if filename.endswith(".md") or filename.endswith(".py"):
+        if filename.endswith(".md") or filename.endswith(".txt"):
             f = open(file_path, "r")
             md = Markdown(f.read())
             print_markdown(md)
+            """
+
+    # Add files to file_to_paths dictionary
+    # And print each filename for selection
+    for index, file in enumerate(os.listdir(directory)):
+        filename = os.fsdecode(file)
+        file_path = directory + filename
+        if filename.endswith(".md") or filename.endswith(".txt"):
+            files_to_paths.update({filename: file_path})
+            with open(file_path, "r")as f:
+                title = f.readline().lstrip('#')
+                console.print((index+1), title, style="green")
+    
+
 
 
 def load_config():
