@@ -1,12 +1,11 @@
 from recipe_scrapers import scrape_me
 from rich.console import Console
 from rich.markdown import Markdown
-import rich.text
 import argparse
 import yaml
 import os
 import platformdirs
-import tempfile
+
 
 console = Console()
 
@@ -204,4 +203,5 @@ def main():
         browse_recipes()
 
 
-main()
+if __name__ == "__main__":
+    main()
