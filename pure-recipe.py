@@ -9,8 +9,8 @@ import platformdirs
 console = Console()
 
 try:
-        with open("config.yaml", "r") as file:
-            settings = yaml.safe_load(file)
+    with open("config.yaml", "r") as file:
+        settings = yaml.safe_load(file)
 except:
     print("A config.yaml file has been created in ~/.config/pure-recipe.")
     print("Please add a path to the config file to save your recipes.")
@@ -93,17 +93,17 @@ def load_config():
     """
     Loads the config settings for saving recipe files.
     """
-    config_path = platformdirs.user_config_path(appname='pure-recipe')
+    config_path = platformdirs.user_config_path(appname="pure-recipe")
 
     try:
         os.chdir(config_path)
-    except: 
+    except:
         os.mkdir(config_path)
         os.chdir(config_path)
 
     directory = settings.get("directory")
 
-    if directory == '':
+    if directory == "":
         print("Please add a path to the config file to save your recipes.")
         print("Then, try again.")
         quit()
@@ -111,9 +111,9 @@ def load_config():
 
 def main():
     """
-    Flow for the application. 
+    Flow for the application.
 
-    Depending on the arguments, we either view or save the corresponding recipe. 
+    Depending on the arguments, we either view or save the corresponding recipe.
     """
 
     parser = argparse.ArgumentParser(
@@ -127,31 +127,35 @@ def main():
     url = args.url
 
     if args.operations == "view":
-        try: 
+        try:
             view_in_terminal(url)
         except:
-            console.print('\nUh oh! There was an error.', style='bright_red bold')
-            print('\nUsage:')
-            print('python pure-recipe.py view https://recipes.com/sample-recipe')
-            console.print('\nTry again, or see documentation for more info.\n')
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py view https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
 
     if args.operations == "save":
-        try: 
+        try:
             save_to_markdown(url)
         except:
-            console.print('\nUh oh! There was an error.', style='bright_red bold')
-            print('\nUsage:')
-            print('python pure-recipe.py save https://recipes.com/sample-recipe')
-            console.print('\nTry again, or see documentation for more info.\n')
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py save https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
 
     if args.operations == "list":
         f = open(url, "r")
         for line in f:
-            try:    
-                single_url = line.strip().rstrip('\n')
+            try:
+                single_url = line.strip().rstrip("\n")
                 save_to_markdown(single_url)
             except:
-                console.print('\nFile error. Try again using proper file format. See documentation.\n', style="bright_red")
+                console.print(
+                    "\nFile error. Try again using proper file format. See documentation.\n",
+                    style="bright_red",
+                )
 
 
-main()
+if __name__ == "__main__":
+    main()
