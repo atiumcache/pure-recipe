@@ -34,7 +34,7 @@ Alternatively, you can install each dependency manually:
 
 ## Usage
 
-There are three options: `view`, `save`, or `list`. 
+There are four options: `view`, `save`, `list`, or `browse`. 
 
 ### View in Terminal
 
