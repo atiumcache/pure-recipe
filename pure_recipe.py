@@ -6,14 +6,13 @@ import yaml
 import os
 import platformdirs
 
-
 console = Console()
-
 
 """
 Loads settings from yaml config file.
 Prints message if no config file.
 """
+
 try:
     with open("config.yaml", "r") as file:
         settings = yaml.safe_load(file)
@@ -46,6 +45,7 @@ def save_to_markdown(recipe_url):
     Scrapes recipe URL and saves to markdown file.
 
     :param url: a url string from a recipe website
+
     :rtype: string
     :return: path to file
     """
@@ -68,7 +68,7 @@ def save_to_markdown(recipe_url):
         print(f"\n## Instructions", file=text_file)
         for index, instruction in enumerate(scraper.instructions_list()):
             print(f"{index+1}.", instruction, file=text_file)
-
+            
     return recipe_file
 
 
@@ -76,11 +76,14 @@ def print_markdown(md):
     console.print("\n")
     console.print(md)
     console.print("\n")
+    return True
+
 
 
 def view_in_terminal(recipe_url):
     """
     Scrapes recipe url and returns markdown-formatted recipe to terminal output.
+
 
     :param url: a url string from a recipe website
     :rtype: bool
@@ -146,6 +149,7 @@ def browse_recipes():
     choose_recipe()
 
 
+
 def load_config():
     """
     Loads the config settings for saving recipe files.
@@ -165,7 +169,7 @@ def load_config():
         print("Then, try again.")
         quit()
 
-
+        
 def main():
     """
     Flow for the application.
@@ -218,6 +222,6 @@ def main():
     if args.operations == "browse":
         browse_recipes()
 
-
+        
 if __name__ == "__main__":
     main()
