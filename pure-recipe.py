@@ -73,9 +73,9 @@ def save_to_markdown(recipe_url):
 
 
 def print_markdown(md):
-    console.print('\n')
+    console.print("\n")
     console.print(md)
-    console.print('\n')
+    console.print("\n")
 
 
 def view_in_terminal(recipe_url):
@@ -97,11 +97,11 @@ def view_in_terminal(recipe_url):
         return False
 
     return True
-    
+
 
 def browse_recipes():
     with open("config.yaml", "r") as file:
-            settings = yaml.safe_load(file)
+        settings = yaml.safe_load(file)
 
     directory = os.fsencode(settings.get("directory"))
 
@@ -109,15 +109,10 @@ def browse_recipes():
 
     files_to_paths = {}
 
-    """
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        file_path = directory + filename
-        if filename.endswith(".md") or filename.endswith(".txt"):
-            f = open(file_path, "r")
-            md = Markdown(f.read())
-            print_markdown(md)
-            """
+    def print_titles(recipe_path):
+        with open(recipe_path, "r") as f:
+            title = f.readline().lstrip("#")
+            console.print((index + 1), title, style="green")
 
     # Add files to file_to_paths dictionary
     # And print each filename for selection
@@ -126,28 +121,46 @@ def browse_recipes():
         file_path = directory + filename
         if filename.endswith(".md") or filename.endswith(".txt"):
             files_to_paths.update({filename: file_path})
-            with open(file_path, "r")as f:
-                title = f.readline().lstrip('#')
-                console.print((index+1), title, style="green")
-    
+            print_titles(file_path)
 
+    def choose_recipe():
+        file_path = ""
+
+        inp = input("Enter a number to choose a recipe. Or, enter 'q' to quit.\n")
+
+        if inp == "q":
+            exit()
+  
+        try: 
+            choice = int(inp) - 1
+            file_path = list(files_to_paths.values())[choice]
+        except:
+            console.print("\nInput error. Try again.\n", style="bright_red")
+            choose_recipe()
+
+        if file:
+            f = open(file_path, "r")
+            md = Markdown(f.read())
+            print_markdown(md)
+
+    choose_recipe()
 
 
 def load_config():
     """
     Loads the config settings for saving recipe files.
     """
-    config_path = platformdirs.user_config_path(appname='pure-recipe')
+    config_path = platformdirs.user_config_path(appname="pure-recipe")
 
     try:
         os.chdir(config_path)
-    except: 
+    except:
         os.mkdir(config_path)
         os.chdir(config_path)
 
     directory = settings.get("directory")
 
-    if directory == '':
+    if directory == "":
         print("Please add a path to the config file to save your recipes.")
         print("Then, try again.")
         quit()
@@ -155,9 +168,9 @@ def load_config():
 
 def main():
     """
-    Flow for the application. 
+    Flow for the application.
 
-    Depending on the arguments, we either view or save the corresponding recipe. 
+    Depending on the arguments, we either view or save the corresponding recipe.
 
     Or, we can browse previously saved recipes.
     """
@@ -167,37 +180,40 @@ def main():
     )
 
     parser.add_argument("operations", choices=["view", "save", "list", "browse"])
-    parser.add_argument("url")
+    parser.add_argument("--url", default="foo")
 
     args = parser.parse_args()
     url = args.url
 
     if args.operations == "view":
-        try: 
+        try:
             view_in_terminal(url)
         except:
-            console.print('\nUh oh! There was an error.', style='bright_red bold')
-            print('\nUsage:')
-            print('python pure-recipe.py view https://recipes.com/sample-recipe')
-            console.print('\nTry again, or see documentation for more info.\n')
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py view https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
 
     if args.operations == "save":
-        try: 
+        try:
             save_to_markdown(url)
         except:
-            console.print('\nUh oh! There was an error.', style='bright_red bold')
-            print('\nUsage:')
-            print('python pure-recipe.py save https://recipes.com/sample-recipe')
-            console.print('\nTry again, or see documentation for more info.\n')
+            console.print("\nUh oh! There was an error.", style="bright_red bold")
+            print("\nUsage:")
+            print("python pure-recipe.py save https://recipes.com/sample-recipe")
+            console.print("\nTry again, or see documentation for more info.\n")
 
     if args.operations == "list":
         f = open(url, "r")
         for line in f:
-            try:    
-                single_url = line.strip().rstrip('\n')
+            try:
+                single_url = line.strip().rstrip("\n")
                 save_to_markdown(single_url)
             except:
-                console.print('\nFile error. Try again using proper file format. See documentation.\n', style="bright_red")
+                console.print(
+                    "\nFile error. Try again using proper file format. See documentation.\n",
+                    style="bright_red",
+                )
 
     if args.operations == "browse":
         browse_recipes()
