@@ -10,6 +10,7 @@ This is a terminal application that allows you to quickly bypass the junk that p
 	- [View in Terminal](#view-in-terminal)
 	- [Save to Markdown](#save-to-markdown)
 	- [Save a List of URLs](#save-a-list-of-urls)
+	- [Browse](#browse)
 - [Configuration](#configuration)
 	- [Config Template](#config-template)
 - [Supported Websites](#supported-websites)
@@ -73,6 +74,12 @@ You should see all recipes on the list saved in markdown format.
 
 The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
+### Browse
+
+Browse previously saved recipes with:
+
+	python pure_recipe.py browse
+
 ## Configuration
 
 The program will create a `config.yaml` file upon its first run. Copy and paste the following template into the config file, adding the path to a folder where you want your recipes saved.
@@ -97,11 +104,12 @@ With Pure Recipe, you can be in charge of your own digital recipe book. By savin
 
 ## Future Work
 
-- Error catching for invalid inputs.
+- More error catching for invalid inputs.
+- Unit tests.
 - Different color themes.
 - ~~Ability to pass in a list of URLs to save, all at once.~~
 - Search for recipes from the terminal.
-- Browse your saved-recipes folder in the terminal.
+- ~~Browse your saved-recipes folder in the terminal.~~
 
 ## License
 
