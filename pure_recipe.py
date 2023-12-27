@@ -155,6 +155,10 @@ def view_in_terminal(recipe_url):
 
 
 def browse_recipes():
+    """
+    Provides user with previously-saved recipe options.
+    User can choose 1 to view in terminal.
+    """
     with open("config.yaml", "r") as file:
         settings = yaml.safe_load(file)
 
