@@ -162,9 +162,9 @@ def browse_recipes():
     with open("config.yaml", "r") as file:
         settings = yaml.safe_load(file)
 
-    directory = os.fsencode(settings.get("directory"))
+    directory = settings.get("directory")
 
-    directory = "/home/andrew/Documents/recipes/"
+    print(directory)
 
     files_to_paths = {}
 
