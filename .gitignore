@@ -2,3 +2,12 @@ scraper_calls.txt
 config.yaml
 recipe_list_test.txt
 __pycache__/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
