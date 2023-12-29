@@ -38,7 +38,7 @@ def main():
     )
 
     parser.add_argument("operations", choices=["view", "save", "list", "browse"])
-    parser.add_argument("--url", default="foo")
+    parser.add_argument("url", default="foo", nargs="?")
 
     args = parser.parse_args()
     url = args.url
