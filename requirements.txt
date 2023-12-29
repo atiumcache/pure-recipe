@@ -1,3 +1,4 @@
 rich
 recipe_scrapers
 pyyaml
+platformdirs
