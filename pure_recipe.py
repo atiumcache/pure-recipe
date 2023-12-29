@@ -9,21 +9,6 @@ import platformdirs
 console = Console()
 
 
-"""
-Load settings from yaml config file.
-Prints message if no config file.
-"""
-try:
-    with open("config.yaml", "r") as file:
-        settings = yaml.safe_load(file)
-except:
-    # Config file automatically created in try block.
-    print("A config.yaml file has been created in ~/.config/pure-recipe.")
-    print("Please add a path to the config file to save your recipes.")
-    print("No directory needed if viewing recipes in the terminal.")
-    quit()
-
-
 def main():
     """
     Flow for the application.
@@ -32,6 +17,7 @@ def main():
 
     Or, we can browse previously saved recipes.
     """
+    settings = load_yaml()
 
     parser = argparse.ArgumentParser(
         prog="Pure Recipe", description="Make recipes pretty again."
@@ -45,7 +31,7 @@ def main():
 
     if args.operations == "view":
         try:
-            view_in_terminal(url)
+            view_in_terminal(url, settings)
         except:
             console.print("\nUh oh! There was an error.", style="bright_red bold")
             print("\nUsage:")
@@ -54,7 +40,7 @@ def main():
 
     if args.operations == "save":
         try:
-            save_to_markdown(url)
+            save_to_markdown(url, settings)
         except:
             console.print("\nUh oh! There was an error.", style="bright_red bold")
             print("\nUsage:")
@@ -62,11 +48,12 @@ def main():
             console.print("\nTry again, or see documentation for more info.\n")
 
     if args.operations == "list":
+        os.chdir(settings["directory"])
         f = open(url, "r")
         for line in f:
             try:
                 single_url = line.strip().rstrip("\n")
-                save_to_markdown(single_url)
+                save_to_markdown(single_url, settings)
             except:
                 console.print(
                     "\nFile error. Try again using proper file format. See documentation.\n",
@@ -93,7 +80,7 @@ def format_file_name(recipe_title):
     return "".join(s)
 
 
-def save_to_markdown(recipe_url):
+def save_to_markdown(recipe_url, yaml_settings):
     """
     Scrapes recipe URL and saves to markdown file.
 
@@ -102,23 +89,29 @@ def save_to_markdown(recipe_url):
     :rtype: string
     :return: path to file
     """
-    load_config()
 
     scraper = scrape_me(recipe_url)
-    directory = settings.get("directory")
-    if not os.path.exists(directory):
-        os.makedirs(directory, mode="0o777")
-    title = scraper.title()
-    recipe_file = directory + format_file_name(title) + ".md"
+    directory = yaml_settings.get("directory")
+    # if not os.path.exists(directory):
+    #   os.makedirs(directory, mode="0o777")
+    title = scraper.title().replace(" ", "-")
+    recipe_file = directory + "/" + format_file_name(title) + ".md"
 
     with open(recipe_file, "w+") as text_file:
         print(f"# {title}", file=text_file)
-        print(f"**Serves:** {scraper.yields()}", file=text_file)
-        print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
+
+        if yaml_settings["yield"] != False:
+            print(f"**Serves:** {scraper.yields()}", file=text_file)
+        if yaml_settings["time"] != False:
+            print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
+
         print(f"\n## Ingredients", file=text_file)
+
         for ingredient in scraper.ingredients():
             print(f"-", ingredient, file=text_file)
+
         print(f"\n## Instructions", file=text_file)
+
         for index, instruction in enumerate(scraper.instructions_list()):
             print(f"{index+1}.", instruction, file=text_file)
 
@@ -132,7 +125,7 @@ def print_markdown(md):
     return True
 
 
-def view_in_terminal(recipe_url):
+def view_in_terminal(recipe_url, yaml_settings):
     """
     Scrapes recipe url and returns markdown-formatted recipe to terminal output.
 
@@ -142,7 +135,7 @@ def view_in_terminal(recipe_url):
     :return: True if successful, False otherwise.
     """
     try:
-        file_path = save_to_markdown(recipe_url)
+        file_path = save_to_markdown(recipe_url, yaml_settings)
         f = open(file_path, "r")
         md = Markdown(f.read())
         print_markdown(md)
@@ -177,8 +170,8 @@ def browse_recipes():
     # And print each filename for selection
     for index, file in enumerate(os.listdir(directory)):
         filename = os.fsdecode(file)
-        file_path = directory + filename
-        if filename.endswith(".md") or filename.endswith(".txt"):
+        file_path = directory + '/' + filename
+        if filename.endswith(".md"):
             files_to_paths.update({filename: file_path})
             print_titles(file_path)
 
@@ -205,24 +198,61 @@ def browse_recipes():
     choose_recipe()
 
 
-def load_config():
+def load_yaml():
     """
-    Loads the config settings for saving recipe files.
+    Loads yaml settings. Searches for a config file, creating one if not present.
+
+    :rtype: dictionary
+    :return: mappings for each setting. ex: {time: 'true'}
     """
-    config_path = platformdirs.user_config_path(appname="pure-recipe")
 
-    try:
-        os.chdir(config_path)
-    except:
-        os.mkdir(config_path)
-        os.chdir(config_path)
+    config_dir = os.path.join(platformdirs.user_config_dir(), "pure_recipe")
+    config_path = "config.yaml"
 
-    directory = settings.get("directory")
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
 
-    if directory == "":
-        print("Please add a path to the config file to save your recipes.")
-        print("Then, try again.")
-        quit()
+    os.chdir(config_dir)
+
+    # Create the file if it doesn't exist
+    if not os.path.exists(config_path):
+        with open(config_path, "a"):
+            os.utime(config_path)
+
+    # Open the file since we can be sure it exists now
+    with open(config_path, "r") as file:
+        settings = yaml.safe_load(file)
+
+    # Catch an empty file, even if it wasn't just created
+    if settings is None:
+        settings = dict()
+        settings["directory"] = None
+
+    was_settings_updated = False
+
+    # Generate and update the recipe directory if it doesn't exist
+    if settings.get("directory") is None or "":
+        recipe_directory = os.path.join(platformdirs.user_documents_dir(), "recipes")
+
+        if not os.path.exists(recipe_directory):
+            os.makedirs(recipe_directory)
+
+        settings["directory"] = recipe_directory
+        was_settings_updated = True
+
+    # Generate and update the time and yield options if they don't exist
+    if settings.get("time") is None or "":
+        settings["time"] = "true"
+    if settings.get("yield") is None or "":
+        settings["yield"] = "true"
+
+    # Update the settings file with the changed field(s)
+    if was_settings_updated:
+        with open(config_path, "w") as file:
+            file.write(yaml.safe_dump(settings))
+            print(f"Updated {file.name} to include {settings['directory']}")
+
+    return settings
 
 
 if __name__ == "__main__":
