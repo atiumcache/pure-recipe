@@ -58,7 +58,7 @@ You can turn other settings on/off in the yaml file.
 
 ### Save a List of URLs
 
-Have a whole bunch of recipes that you want to save? Just create a `.txt` file with one recipe on each line. 
+Have a whole bunch of recipes that you want to save? Just create a `.txt` file with one recipe on each line. Make sure the file is located in your `recipe` directory denoted in your `config` file. Default location is `/home/user/Documents/recipes/`.
 
 Example file called `recipes_list.txt`:
 
@@ -82,15 +82,20 @@ Browse previously saved recipes with:
 
 ## Configuration
 
-The program will create a `config.yaml` file upon its first run. Copy and paste the following template into the config file, adding the path to a folder where you want your recipes saved.
+The program will create a `config.yaml` file upon its first run. The program should create default settings, placing a `recipe` directory in the user's `Documents` directory.
+
+If needed, copy and paste the following template into the config file, changing the path to a folder where you want your recipes saved. 
 
 ### Config Template
 
 	---
 	directory: '/home/user/Documents/recipes/'
-	time: true 
+	time: true
 	yield: true
 
+Change `time` or `yield` to false if you don't want these options to populate when you save a recipe.
+
+More settings are planned for the future.
 
 ## Supported Websites
 
