@@ -11,3 +11,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+.pdm-python
+pdm.lock
+*.egg-info/
+
+

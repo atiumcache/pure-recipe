@@ -1,0 +1,23 @@
+[project]
+name = "pure-recipe"
+version = "0.1.0"
+description = "We're tired of the ads. We're tired of the blog posts. We just want the recipe!"
+authors = [
+    {name = "Riley Schroeder", email = "idk@git.com"},
+]
+dependencies = [
+    "rich",
+    "recipe-scrapers",
+    "pyyaml",
+    "platformdirs",
+]
+requires-python = ">=3.7"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+extend-select = ["C", "N", "SIM", "PTH", "I", "PL", "FURB"]
