@@ -18,19 +18,26 @@ This is a terminal application that allows you to quickly bypass the junk that p
 - [Future Work](#future-work)
 - [License](#license)
 
+## Features
+
+- View recipes directly in your terminal.
+- Save recipes to markdown for easy access and sharing.
+- Support for a wide range of cooking sites.
+- Easy-to-use command-line interface.
+
 ## Installation
 
-Download `pure_recipe.py` and `requirements.txt` from this repository.
+**Prerequisites:**
 
-Then, install the dependencies from `pip`:
+- Python 3.6 or higher.
 
-	pip install -r requirements.txt
+**Steps:**
 
-Alternatively, you can install each dependency manually:
+1. Clone the repository or download `pure_recipe.py` and `requirements.txt`.
+2. Install the required Python dependencies:
+	
+ 		pip install -r requirements.txt
 
-	pip install rich
-	pip install recipe_scrapers
-	pip install pyyaml
 
 ## Usage
 
@@ -38,29 +45,39 @@ There are four options: `view`, `save`, `list`, or `browse`.
 
 ### View in Terminal
 
-To view the recipe in the terminal:
+**Command:**
+
+	python pure_recipe.py view [RECIPE_URL]
+
+**Example:**
 
 	python pure_recipe.py view https://www.seriouseats.com/potato-wedges-recipe-5217319
 
-Example of viewing:
+Viewing example:
 
 ![terminal demonstration](pure-recipe.gif)
 
 ### Save to Markdown
 
-To save the recipe to a markdown file: 
+**Command:**
+
+	python pure_recipe.py save [RECIPE_URL]
+
+**Example:**
 
 	python pure_recipe.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
 
-The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
-
-You can turn other settings on/off in the yaml file. 
+Saves multiple recipes from a list of URLs in a text file. The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
 ### Save a List of URLs
 
+**Command:**
+
+	python pure_recipe.py list [FILE_PATH]
+
 Have a whole bunch of recipes that you want to save? Just create a `.txt` file with one recipe on each line. Make sure the file is located in your `recipe` directory denoted in your `config` file. Default location is `/home/user/Documents/recipes/`.
 
-Example file called `recipes_list.txt`:
+Consider an example file called `recipes_list.txt`:
 
 	https://www.seriouseats.com/beef-braciole-recipe-7561806
 	https://www.seriouseats.com/basque-cheesecake
@@ -76,9 +93,11 @@ The default location is `/home/user/Documents/recipes/`. Change this path in the
 
 ### Browse
 
-Browse previously saved recipes with:
+**Command:**
 
 	python pure_recipe.py browse
+ 
+Browse and view your saved recipes.
 
 ## Configuration
 
@@ -89,17 +108,25 @@ If needed, copy and paste the following template into the config file, changing 
 ### Config Template
 
 	---
-	directory: '/home/user/Documents/recipes/'
+	directory: '/path/to/your/recipes/'
 	time: true
 	yield: true
 
-Change `time` or `yield` to false if you don't want these options to populate when you save a recipe.
+- `directory`: Path where your recipes are saved.
+- `time`: Include preparation and cooking time in the output.
+- `yield`: Include the number of servings.
 
 More settings are planned for the future.
 
 ## Supported Websites
 
-See this link for supported websites: https://github.com/hhursev/recipe-scrapers#scrapers-available-for
+Check out the [list of supported websites](https://github.com/hhursev/recipe-scrapers#scrapers-available-for) for recipe scraping.
+
+## Troubleshooting
+
+- Dependency Issues: Ensure all dependencies are correctly installed.
+- Invalid URLs: Check the URL format and website support.
+- File Permissions: Ensure you have write permissions to the specified recipe directory.
 
 ## Why Create Pure Recipe?
 
@@ -109,12 +136,16 @@ With Pure Recipe, you can be in charge of your own digital recipe book. By savin
 
 ## Future Work
 
-- More error catching for invalid inputs.
-- Unit tests.
-- Different color themes.
+- Adding more robust error handling.
+- Implementing unit tests for reliability.
+- Introducing different color themes.
 - ~~Ability to pass in a list of URLs to save, all at once.~~
-- Search for recipes from the terminal.
+- Searching for recipes directly from the terminal.
 - ~~Browse your saved-recipes folder in the terminal.~~
+
+## Contributing
+
+Contributions are welcome! If you have a suggestion or want to contribute code, please feel free to make a pull request or open an issue.
 
 ## License
 
