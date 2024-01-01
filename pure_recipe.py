@@ -10,50 +10,23 @@ console = Console()
 
 
 def main():
-    """
-    Flow for the application.
-
-    Depending on the arguments, we either view or save the corresponding recipe.
-
-    Or, we can browse previously saved recipes.
-    """
     settings = load_yaml()
     args = parse_arguments()
     url = args.url
 
-    if args.operations == "view":
-        try:
-            view_in_terminal(url, settings)
-        except:
-            console.print("\nUh oh! There was an error.", style="bright_red bold")
-            print("\nUsage:")
-            print("python pure-recipe.py view https://recipes.com/sample-recipe")
-            console.print("\nTry again, or see documentation for more info.\n")
-
-    if args.operations == "save":
-        try:
-            save_to_markdown(url, settings)
-        except:
-            console.print("\nUh oh! There was an error.", style="bright_red bold")
-            print("\nUsage:")
-            print("python pure-recipe.py save https://recipes.com/sample-recipe")
-            console.print("\nTry again, or see documentation for more info.\n")
-
-    if args.operations == "list":
-        os.chdir(settings["directory"])
-        f = open(url, "r")
-        for line in f:
-            try:
-                single_url = line.strip().rstrip("\n")
-                save_to_markdown(single_url, settings)
-            except:
-                console.print(
-                    "\nFile error. Try again using proper file format. See documentation.\n",
-                    style="bright_red",
-                )
-
-    if args.operations == "browse":
-        browse_recipes()
+    try: 
+        if args.operations == "view":
+            view_recipe(args.url, settings)
+        elif args.operations == "save":
+            save_recipe_to_markdown(args.url, settings)
+        elif args.operations == "list":
+            save_list_of_recipes(args.url, settings)
+        elif args.operations == "browse":
+            browse_recipes()
+        else: 
+            console.print("Invlaid operation. See documentation.", style="bright_red")
+    except Exception as e:
+        console.print(f"\nAn error occured: {str(e)}", style="bright_red bold")
 
 
 def format_file_name(recipe_title):
@@ -72,7 +45,7 @@ def format_file_name(recipe_title):
     return "".join(s)
 
 
-def save_to_markdown(recipe_url, yaml_settings):
+def save_recipe_to_markdown(recipe_url, yaml_settings):
     """
     Scrapes recipe URL and saves to markdown file.
 
@@ -117,7 +90,7 @@ def print_markdown(md):
     return True
 
 
-def view_in_terminal(recipe_url, yaml_settings):
+def view_recipe(recipe_url, yaml_settings):
     """
     Scrapes recipe url and returns markdown-formatted recipe to terminal output.
 
@@ -127,21 +100,35 @@ def view_in_terminal(recipe_url, yaml_settings):
     :return: True if successful, False otherwise.
     """
     try:
-        file_path = save_to_markdown(recipe_url, yaml_settings)
+        file_path = save_recipe_to_markdown(recipe_url, yaml_settings)
         f = open(file_path, "r")
         md = Markdown(f.read())
         print_markdown(md)
         os.remove(file_path)
     except:
-        console.print("\nError in view_in_terminal function.\n", style="bright_red")
+        console.print("\nError in view_recipe function.\n", style="bright_red")
         return False
 
     return True
 
 
+def save_list_of_recipes(url, settings):
+    os.chdir(settings["directory"])
+    f = open(url, "r")
+    for line in f:
+        try:
+            single_url = line.strip().rstrip("\n")
+            save_recipe_to_markdown(single_url, settings)
+        except:
+            console.print(
+                "\nFile error. Try again using proper file format. See documentation.\n",
+                style="bright_red",
+            )
+
+
 def browse_recipes():
     """
-    Provides user with previously-saved recipe options.
+    Allow user to browse previously-saved recipes.
     User can choose 1 to view in terminal.
     """
     with open("config.yaml", "r") as file:
