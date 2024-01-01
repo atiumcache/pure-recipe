@@ -18,15 +18,7 @@ def main():
     Or, we can browse previously saved recipes.
     """
     settings = load_yaml()
-
-    parser = argparse.ArgumentParser(
-        prog="Pure Recipe", description="Make recipes pretty again."
-    )
-
-    parser.add_argument("operations", choices=["view", "save", "list", "browse"])
-    parser.add_argument("url", default="foo", nargs="?")
-
-    args = parser.parse_args()
+    args = parse_arguments()
     url = args.url
 
     if args.operations == "view":
@@ -253,6 +245,17 @@ def load_yaml():
             print(f"Updated {file.name} to include {settings['directory']}")
 
     return settings
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        prog="Pure Recipe", description="Make recipes pretty again."
+    )
+
+    parser.add_argument("operations", choices=["view", "save", "list", "browse"])
+    parser.add_argument("url", default="foo", nargs="?")
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
