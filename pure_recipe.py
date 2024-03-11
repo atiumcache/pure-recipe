@@ -103,7 +103,6 @@ def view_recipe(recipe_url, yaml_settings):
         f = open(file_path, "r")
         md = Markdown(f.read())
         print_markdown(md)
-        # os.remove(file_path) this removes a persistent error, and makes view default to saving the recipe, which is more natural anyway
     except:
         console.print("\nError in view_recipe function.\n", style="bright_red")
         return False
@@ -216,15 +215,6 @@ def load_yaml():
         os.makedirs(recipe_directory)
         print('Created new folder for saving recipes at:' +recipe_directory)
 
-   
-  #  if settings.get("directory") is None or "":
-  #      recipe_directory = os.path.join(platformdirs.user_documents_dir(), "recipes")
-  #      if not os.path.exists(recipe_directory):
-  #          os.makedirs(recipe_directory)
-
-  #      settings["directory"] = recipe_directory
-  #      was_settings_updated = True
-    
 
     # Generate and update the time and yield options if they don't exist
     if settings.get("time") is None or "":
