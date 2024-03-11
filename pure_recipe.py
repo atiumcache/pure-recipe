@@ -54,8 +54,10 @@ def save_recipe_to_markdown(recipe_url, yaml_settings):
     :rtype: string
     :return: path to file
     """
-
-    scraper = scrape_me(recipe_url)
+    try:
+        scraper = scrape_me(recipe_url)
+    except Exception as e:
+        console.print(f"\nCould not scrape recipe, error: {str(e)}", style="bright_cyan bold")
     directory = yaml_settings.get("directory")
     # if not os.path.exists(directory):
     #   os.makedirs(directory, mode="0o777")
