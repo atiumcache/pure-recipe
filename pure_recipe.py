@@ -54,13 +54,14 @@ def save_recipe_to_markdown(recipe_url, yaml_settings):
     :rtype: string
     :return: path to file
     """
+
     scraper = scrape_me(recipe_url)
     directory = yaml_settings.get("directory")
     # if not os.path.exists(directory):
     #   os.makedirs(directory, mode="0o777")
     title = scraper.title().replace(" ", "-")
-   
     recipe_file = directory + "/" + format_file_name(title) + ".md"
+
     with open(recipe_file, "w+") as text_file:
         print(f"# {title}", file=text_file)
 
@@ -196,8 +197,6 @@ def load_yaml():
         with open(config_path, "a"):
             os.utime(config_path)
 
-
-
     # Open the file since we can be sure it exists now
     with open(config_path, "r") as file:
         settings = yaml.safe_load(file)
@@ -207,7 +206,6 @@ def load_yaml():
         settings = dict()
         settings["directory"] = None
 
-   # was_settings_updated = False
 
     # Generate and update the recipe directory if it doesn't exist
     recipe_directory = settings.get("directory")
