@@ -103,6 +103,7 @@ def view_recipe(recipe_url, yaml_settings):
         file_path = save_recipe_to_markdown(recipe_url, yaml_settings)
         f = open(file_path, "r")
         md = Markdown(f.read())
+        f.close()
         print_markdown(md)
         os.remove(file_path)
     except:
