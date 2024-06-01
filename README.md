@@ -67,7 +67,7 @@ Viewing example:
 
 	python pure_recipe.py save https://www.seriouseats.com/potato-wedges-recipe-5217319
 
-Saves multiple recipes from a list of URLs in a text file. The default location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
+Saves a recipe from a given URL. The default save location is `/home/user/Documents/recipes/`. Change this path in the `config.yaml` file, as described below. 
 
 ### Save a List of URLs
 
