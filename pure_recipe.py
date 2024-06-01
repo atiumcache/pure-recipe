@@ -54,8 +54,10 @@ def save_recipe_to_markdown(recipe_url, yaml_settings):
     :rtype: string
     :return: path to file
     """
-
-    scraper = scrape_me(recipe_url)
+    try:
+        scraper = scrape_me(recipe_url)
+    except Exception as e:
+        console.print(f"\nCould not scrape recipe, error: {str(e)}", style="bright_cyan bold")
     directory = yaml_settings.get("directory")
     # if not os.path.exists(directory):
     #   os.makedirs(directory, mode="0o777")
@@ -105,7 +107,6 @@ def view_recipe(recipe_url, yaml_settings):
         md = Markdown(f.read())
         f.close()
         print_markdown(md)
-        os.remove(file_path)
     except:
         console.print("\nError in view_recipe function.\n", style="bright_red")
         return False
@@ -208,17 +209,13 @@ def load_yaml():
         settings = dict()
         settings["directory"] = None
 
-    was_settings_updated = False
 
     # Generate and update the recipe directory if it doesn't exist
-    if settings.get("directory") is None or "":
-        recipe_directory = os.path.join(platformdirs.user_documents_dir(), "recipes")
+    recipe_directory = settings.get("directory")
+    if not os.path.exists(recipe_directory):
+        os.makedirs(recipe_directory)
+        print('Created new folder for saving recipes at:' +recipe_directory)
 
-        if not os.path.exists(recipe_directory):
-            os.makedirs(recipe_directory)
-
-        settings["directory"] = recipe_directory
-        was_settings_updated = True
 
     # Generate and update the time and yield options if they don't exist
     if settings.get("time") is None or "":
@@ -227,11 +224,6 @@ def load_yaml():
         settings["yield"] = "true"
 
     # Update the settings file with the changed field(s)
-    if was_settings_updated:
-        with open(config_path, "w") as file:
-            file.write(yaml.safe_dump(settings))
-            print(f"Updated {file.name} to include {settings['directory']}")
-
     return settings
 
 
