@@ -1,5 +1,7 @@
 import shutil
 
+import requests
+from bs4 import BeautifulSoup
 from recipe_scrapers import scrape_me
 from rich.console import Console
 from rich.markdown import Markdown
@@ -26,11 +28,95 @@ def main():
             save_list_of_recipes(args.url, settings)
         elif args.operations == "browse":
             browse_recipes()
+        elif args.operations == "search":
+            search()
         else: 
             console.print("Invalid operation. See documentation.",
                           style="bright_red")
     except Exception as e:
         console.print(f"\nAn error occurred: {str(e)}", style="bright_red bold")
+
+
+def search():
+    query = input("Enter a recipe search term: ")
+    recipe_url = choose_recipe_from_search(query)
+    if recipe_url:
+        view_recipe_online(recipe_url)
+
+
+def search_recipes(query):
+    """
+    Search for recipes online.
+
+    Args:
+        query (str): Search query.
+
+    Returns:
+        list of tuples: List of (recipe title, recipe URL).
+    """
+    url = f"https://www.allrecipes.com/search/results/?search={query}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    recipes = []
+    for item in soup.select('.fixed-recipe-card'):
+        title = item.select_one('.fixed-recipe-card__title-link').text.strip()
+        link = item.select_one('.fixed-recipe-card__title-link')['href']
+        recipes.append((title, link))
+
+    return recipes
+
+
+def choose_recipe_from_search(query):
+    """
+    Search for recipes and choose one from the results.
+
+    Args:
+        query (str): Search query.
+
+    Returns:
+        str: URL of the chosen recipe.
+    """
+    recipes = search_recipes(query)
+    choices = [f"{title} ({url})" for title, url in recipes] + ["Quit"]
+
+    questions = [
+        inquirer.List(
+            "recipe",
+            message="Select a recipe to view",
+            choices=choices
+        )
+    ]
+
+    answers = inquirer.prompt(questions)
+    if answers["recipe"] == "Quit":
+        return None
+
+    selected_recipe = answers["recipe"]
+    selected_url = selected_recipe.split('(')[-1][:-1]
+
+    return selected_url
+
+
+def view_recipe_online(recipe_url: str) -> None:
+    """
+    Fetches and displays a recipe from a given URL.
+
+    Args:
+        recipe_url (str): URL of the recipe to display.
+    """
+    response = requests.get(recipe_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    title = soup.select_one('.recipe-summary__h1').text.strip()
+    ingredients = [li.text.strip() for li in soup.select('.recipe-ingred_txt') if li.text.strip()]
+    instructions = [step.text.strip() for step in soup.select('.recipe-directions__list--item') if step.text.strip()]
+
+    md_content = f"# {title}\n\n## Ingredients\n" + "\n".join(
+        [f"- {ing}" for ing in ingredients]) + "\n\n## Instructions\n" + "\n".join(
+        [f"{i + 1}. {inst}" for i, inst in enumerate(instructions)])
+
+    print_markdown(md_content)
 
 
 def get_console_width() -> int:
@@ -336,7 +422,7 @@ def parse_arguments() -> argparse.Namespace:
         prog="Pure Recipe", description="Make recipes pretty again."
     )
 
-    parser.add_argument("operations", choices=["view", "save", "list", "browse"])
+    parser.add_argument("operations", choices=["view", "save", "list", "browse", "search"])
     parser.add_argument("url", default="foo", nargs="?")
 
     return parser.parse_args()
