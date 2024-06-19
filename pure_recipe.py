@@ -16,7 +16,7 @@ def main():
 
     try: 
         if args.operations == "view":
-            view_recipe(args.url, settings)
+            view_recipe(args.url, settings, prompt_save=True)
         elif args.operations == "save":
             save_recipe_to_markdown(args.url, settings)
         elif args.operations == "list":
@@ -94,21 +94,19 @@ def print_markdown(md) -> None:
     console.print("\n")
 
 
-def view_recipe(recipe_url: str, yaml_settings: dict) -> None:
+def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save=True) -> None:
     """
     Scrapes a recipe URL and prints a markdown-formatted recipe to terminal output.
 
     Args:
         recipe_url (str): A URL string from a recipe website.
         yaml_settings (dict): Settings loaded from a YAML configuration file.
-
-    Raises:
-        FileNotFoundError: If the markdown file could not be found.
-        IOError: If there is an I/O error when reading the file.
-        Exception: For any other errors that occur.
+        prompt_save (bool): Whether to prompt the user to save the recipe.
     """
     try:
         file_path = save_recipe_to_markdown(recipe_url, yaml_settings)
+        if not file_path:
+            return
 
         with open(file_path, "r") as f:
             md_content = f.read()
@@ -116,15 +114,30 @@ def view_recipe(recipe_url: str, yaml_settings: dict) -> None:
         md = Markdown(md_content)
         print_markdown(md)
 
+        if prompt_save:
+            after_view_question = [
+                inquirer.List(
+                    "after_view",
+                    message="What would you like to do next?",
+                    choices=["Save this recipe", "Quit"]
+                )
+            ]
+
+            after_view_answer = inquirer.prompt(after_view_question)
+            if after_view_answer["after_view"] == "Save this recipe":
+                try:
+                    save_recipe_to_markdown(recipe_url, yaml_settings)
+                    console.print("\nRecipe saved successfully.\n", style="bright_green")
+                except Exception as e:
+                    console.print(f"\nError saving the recipe: {str(e)}\n", style="bright_red")
+            elif after_view_answer["after_view"] == "Quit":
+                return
     except FileNotFoundError:
         console.print("\nMarkdown file not found.\n", style="bright_red")
-        raise
     except IOError as e:
         console.print(f"\nI/O error({e.errno}): {e.strerror}\n", style="bright_red")
-        raise
     except Exception as e:
         console.print(f"\nAn error occurred: {str(e)}\n", style="bright_red")
-        raise
 
 
 def save_list_of_recipes(url: str, settings: dict) -> None:
