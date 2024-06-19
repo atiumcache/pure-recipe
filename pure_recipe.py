@@ -1,3 +1,5 @@
+import shutil
+
 from recipe_scrapers import scrape_me
 from rich.console import Console
 from rich.markdown import Markdown
@@ -6,6 +8,7 @@ import yaml
 import os
 import platformdirs
 import inquirer
+
 
 console = Console()
 
@@ -28,6 +31,19 @@ def main():
                           style="bright_red")
     except Exception as e:
         console.print(f"\nAn error occurred: {str(e)}", style="bright_red bold")
+
+
+def get_console_width() -> int:
+    """Get the current width of the console, with a maximum limit."""
+    return min(shutil.get_terminal_size().columns, 80)
+
+
+def clear_console() -> None:
+    """Clear the console."""
+    if os.name == 'nt':  # For Windows
+        os.system('cls')
+    else:  # For Unix-based systems (Linux, macOS)
+        os.system('clear')
 
 
 def format_file_name(recipe_title: str) -> str:
@@ -87,11 +103,13 @@ def save_recipe_to_markdown(recipe_url: str, yaml_settings):
     return recipe_file
 
 
-def print_markdown(md) -> None:
-    """Prints a markdown file."""
-    console.print("\n")
-    console.print(md)
-    console.print("\n")
+def print_markdown(md_content: str) -> None:
+    """Prints markdown content with a dynamically limited width."""
+    clear_console()
+    console_width = get_console_width()
+    console = Console(width=console_width)
+    md = Markdown(md_content)
+    console.print('\n', md, '\n')
 
 
 def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save=True) -> None:
@@ -111,8 +129,7 @@ def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save=True) -> None:
         with open(file_path, "r") as f:
             md_content = f.read()
 
-        md = Markdown(md_content)
-        print_markdown(md)
+        print_markdown(md_content)
 
         if prompt_save:
             after_view_question = [
@@ -237,8 +254,7 @@ def browse_recipes():
         try:
             with open(file_path, "r") as f:
                 md_content = f.read()
-            md = Markdown(md_content)
-            print_markdown(md)
+            print_markdown(md_content)
         except Exception as e:
             console.print(f"\nError reading the file: {str(e)}\n", style="bright_red")
 
