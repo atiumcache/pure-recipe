@@ -9,7 +9,6 @@ import os
 import platformdirs
 import inquirer
 
-
 console = Console()
 
 
@@ -17,7 +16,7 @@ def main():
     settings = load_yaml()
     args = parse_arguments()
 
-    try: 
+    try:
         if args.operations == "view":
             view_recipe(args.url, settings, prompt_save=True)
         elif args.operations == "save":
@@ -25,8 +24,8 @@ def main():
         elif args.operations == "list":
             save_list_of_recipes(args.url, settings)
         elif args.operations == "browse":
-            browse_recipes()
-        else: 
+            browse_recipes(settings)
+        else:
             console.print("Invalid operation. See documentation.",
                           style="bright_red")
     except Exception as e:
@@ -62,14 +61,13 @@ def format_file_name(recipe_title: str) -> str:
     return "".join(s)
 
 
-def save_recipe_to_markdown(recipe_url: str, yaml_settings):
+def save_recipe_to_markdown(recipe_url: str, yaml_settings) -> str:
     """
     Scrapes recipe URL and saves to markdown file.
 
-    :param recipe_url: a url string from a recipe website
+    :param recipe_url: url string from a recipe website
     :param yaml_settings: a dictionary containing settings for a recipe
 
-    :rtype: string
     :return: path to file
     """
     try:
@@ -85,9 +83,9 @@ def save_recipe_to_markdown(recipe_url: str, yaml_settings):
     with open(recipe_file, "w+") as text_file:
         print(f"# {title}", file=text_file)
 
-        if yaml_settings["yield"] != False:
+        if yaml_settings["yield"]:
             print(f"**Serves:** {scraper.yields()}", file=text_file)
-        if yaml_settings["time"] != False:
+        if yaml_settings["time"]:
             print(f"**Total Time:** {scraper.total_time()} mins", file=text_file)
 
         print(f"\n## Ingredients", file=text_file)
@@ -98,7 +96,7 @@ def save_recipe_to_markdown(recipe_url: str, yaml_settings):
         print(f"\n## Instructions", file=text_file)
 
         for index, instruction in enumerate(scraper.instructions_list()):
-            print(f"{index+1}.", instruction, file=text_file)
+            print(f"{index + 1}.", instruction, file=text_file)
 
     return recipe_file
 
@@ -112,7 +110,7 @@ def print_markdown(md_content: str) -> None:
     console.print('\n', md, '\n')
 
 
-def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save=True) -> None:
+def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save: bool = True) -> None:
     """
     Scrapes a recipe URL and prints a markdown-formatted recipe to terminal output.
 
@@ -176,7 +174,8 @@ def save_list_of_recipes(url: str, settings: dict) -> None:
         console.print("\nDirectory not found. Please check the settings.\n", style="bright_red")
         raise
     except Exception as e:
-        console.print(f"\nAn error occurred while changing directory: {str(e)}\n", style="bright_red")
+        console.print(f"\nAn error occurred while changing directory: {str(e)}\n",
+                      style="bright_red")
         raise
 
     try:
@@ -191,7 +190,8 @@ def save_list_of_recipes(url: str, settings: dict) -> None:
                         style="bright_red",
                     )
     except FileNotFoundError:
-        console.print("\nURL file not found. Please provide a valid file path.\n", style="bright_red")
+        console.print("\nURL file not found. Please provide a valid file path.\n",
+                      style="bright_red")
         raise
     except IOError as e:
         console.print(f"\nI/O error({e.errno}): {e.strerror}\n", style="bright_red")
@@ -201,75 +201,60 @@ def save_list_of_recipes(url: str, settings: dict) -> None:
         raise
 
 
-def browse_recipes():
+def browse_recipes(settings):
     """
     Allow user to browse previously-saved recipes.
     User can choose 1 to view in terminal.
     """
-    while True:
-        # Load settings from YAML file
-        with open("config.yaml", "r") as file:
-            settings = yaml.safe_load(file)
+    directory = settings.get("directory")
+    if not directory:
+        console.print("\nDirectory not specified in the settings.\n", style="bright_red")
+        return
 
-        directory = settings.get("directory")
-        if not directory:
-            console.print("\nDirectory not specified in the settings.\n", style="bright_red")
-            return
+    title_to_file = {}
 
-        files_to_paths = {}
-        titles = []
-
-        # Gather markdown files and their paths
-        for file in os.listdir(directory):
-            filename = os.fsdecode(file)
-            file_path = os.path.join(directory, filename)
-            if filename.endswith(".md"):
-                files_to_paths[filename] = file_path
-                with open(file_path, "r") as f:
-                    title = f.readline().lstrip("#").strip()
-                    titles.append(f"{title} ({filename})")
-
-        if not titles:
-            console.print("\nNo markdown files found in the specified directory.\n", style="bright_red")
-            return
-
-        # Prompt user to select a recipe
-        questions = [
-            inquirer.List(
-                "recipe",
-                message="Select a recipe to view",
-                choices=titles + ["Quit"]
-            )
-        ]
-
-        answers = inquirer.prompt(questions)
-        if answers["recipe"] == "Quit":
-            break
-
-        selected_title = answers["recipe"]
-        selected_filename = selected_title.split(" (")[-1][:-1]
-        file_path = files_to_paths[selected_filename]
-
-        # Display the selected recipe
-        try:
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        file_path = os.path.join(directory, filename)
+        if filename.endswith(".md"):
             with open(file_path, "r") as f:
-                md_content = f.read()
-            print_markdown(md_content)
-        except Exception as e:
-            console.print(f"\nError reading the file: {str(e)}\n", style="bright_red")
+                title = f.readline().lstrip("#").strip()
+                title_to_file[title] = file_path
 
-        # Offer to go back to the menu
-        back_to_menu_question = [
-            inquirer.List(
-                "back_to_menu",
-                message="What would you like to do next?",
-                choices=["Back to menu", "Quit"]
-            )
-        ]
+    if not title_to_file:
+        console.print("\nNo markdown files found in the specified directory.\n", style="bright_red")
+        return
 
-        back_to_menu_answer = inquirer.prompt(back_to_menu_question)
-        if back_to_menu_answer["back_to_menu"] == "Quit":
-            break
+    titles = list(title_to_file.keys())
+
+    questions = [
+        inquirer.List("recipe", message="Select a recipe to view", choices=titles + ["Quit"])
+    ]
+
+    answers = inquirer.prompt(questions)
+    if answers["recipe"] == "Quit":
+        return
+
+    selected_title = answers["recipe"]
+    file_path = title_to_file[selected_title]
+
+    try:
+        with open(file_path, "r") as f:
+            md_content = f.read()
+        print_markdown(md_content)
+    except Exception as e:
+        console.print(f"\nError reading the file: {str(e)}\n", style="bright_red")
+
+    back_to_menu_question = [
+        inquirer.List("back_to_menu", message="What would you like to do next?",
+                      choices=["Back to menu", "Quit"])
+    ]
+
+    back_to_menu_answer = inquirer.prompt(back_to_menu_question)
+    if back_to_menu_answer["back_to_menu"] == "Quit":
+        return
+    elif back_to_menu_answer["back_to_menu"] == "Back to menu":
+        browse_recipes(settings)
 
 
 def load_yaml() -> dict:
