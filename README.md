@@ -55,7 +55,7 @@ There are four options: `view`, `save`, `list`, or `browse`.
 
 Viewing example:
 
-![terminal demonstration](pure-recipe.gif)
+![terminal demonstration](gifs/pure-recipe.gif)
 
 ### Save to Markdown
 
