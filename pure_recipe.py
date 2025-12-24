@@ -74,11 +74,19 @@ def save_recipe_to_markdown(recipe_url: str, yaml_settings) -> str:
         scraper = scrape_me(recipe_url)
     except Exception as e:
         console.print(f"\nCould not scrape recipe, error: {str(e)}", style="bright_cyan bold")
+        return None
+    
     directory = yaml_settings.get("directory")
-    # if not os.path.exists(directory):
-    #   os.makedirs(directory, mode="0o777")
+    if not directory:
+        console.print("\nDirectory not specified in settings.\n", style="bright_red")
+        return None
+    
+    # Ensure directory exists
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+    
     title = scraper.title().replace(" ", "-")
-    recipe_file = directory + "/" + format_file_name(title) + ".md"
+    recipe_file = os.path.join(directory, format_file_name(title) + ".md")
 
     with open(recipe_file, "w+") as text_file:
         print(f"# {title}", file=text_file)
@@ -138,14 +146,20 @@ def view_recipe(recipe_url: str, yaml_settings: dict, prompt_save: bool = True) 
                 )
             ]
 
-            after_view_answer = inquirer.prompt(after_view_question)
-            if after_view_answer["after_view"] == "Save this recipe":
-                try:
-                    save_recipe_to_markdown(recipe_url, yaml_settings)
-                    console.print("\nRecipe saved successfully.\n", style="bright_green")
-                except Exception as e:
-                    console.print(f"\nError saving the recipe: {str(e)}\n", style="bright_red")
-            elif after_view_answer["after_view"] == "Quit":
+            try:
+                after_view_answer = inquirer.prompt(after_view_question)
+                if after_view_answer and after_view_answer.get("after_view") == "Save this recipe":
+                    try:
+                        save_recipe_to_markdown(recipe_url, yaml_settings)
+                        console.print("\nRecipe saved successfully.\n", style="bright_green")
+                    except Exception as e:
+                        console.print(f"\nError saving the recipe: {str(e)}\n", style="bright_red")
+                elif after_view_answer and after_view_answer.get("after_view") == "Quit":
+                    return
+            except (KeyboardInterrupt, EOFError):
+                return
+            except Exception as e:
+                console.print(f"\nError with prompt: {str(e)}\n", style="bright_red")
                 return
     except FileNotFoundError:
         console.print("\nMarkdown file not found.\n", style="bright_red")
@@ -289,6 +303,11 @@ def load_yaml() -> dict:
 
     # Generate and update the recipe directory if it doesn't exist
     recipe_directory = settings.get("directory")
+    if not recipe_directory:
+        # Set default directory if not specified
+        recipe_directory = os.path.join(platformdirs.user_data_dir(), "pure_recipe", "recipes")
+        settings["directory"] = recipe_directory
+    
     if not os.path.exists(recipe_directory):
         os.makedirs(recipe_directory)
         print('Created new folder for saving recipes at:' + recipe_directory)
